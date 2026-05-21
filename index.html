@@ -1,1 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Trade | Forex & Betting Platform</title>
+    
+    <!-- Astaamaha Icons-ka -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Isku xirkii labada fayl (Aad dalbatay) -->
+    <link rel="stylesheet" href="style.css">
 
+    <!-- CSS-tii Premium Black & Brown oo halkan ku dhex diyaarsan si aadan u wareerin -->
+    <style>
+        :root {
+            --bg-main: #121212;
+            --bg-card: #1e1b18;
+            --primary: #8B5A2B; /* Rich Chocolate Brown */
+            --primary-light: #CD853F; /* Peru Brown */
+            --accent: #FFD700; /* Luxury Gold */
+            --text-main: #FFFFFF;
+            --text-muted: #A0A0A0;
+            --green-trade: #00E676; /* Forex Buy Green */
+            --red-trade: #FF5252; /* Forex Sell Red */
+            --sidebar-width: 260px;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Premium Ultra-Dark Mode Background Settings */
+        [data-theme="dark-premium"] {
+            --bg-main: #050505;
+            --bg-card: #14110f;
+            --primary: #5c3a1a;
+            --text-muted: #757575;
+            --accent: #E6B800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        /* SIDEBAR NAVIGATION (1XBET STYLE) */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-card);
+            border-right: 1px solid rgba(139, 90, 43, 0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px 15px;
+            z-index: 10;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 5px 20px 5px;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .logo-section i {
+            color: var(--primary-light);
+            filter: drop-shadow(0 0 5px var(--primary-light));
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, #5c3a1a 100%);
+            color: var(--text-main);
+            box-shadow: 0 4px 20px rgba(139, 90, 43, 0.4);
+            transform: translateX(5px);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            width: 25px;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover i, .nav-item.active i {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: linear-gradient(135deg, var(--bg-main) 0%, #1c140e 100%);
+        }
+
+        .top-header {
+            background-color: var(--bg-card);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(139, 90, 43, 0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #2b1f17 0%, var(--primary) 100%);
+            padding: 12px 25px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .balance-amount {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* APP PAGES WINDWOS */
+        .app-page {
+            display: none;
+            padding: 35px 40px;
+            animation: fadeInPage 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-page.active-page {
+            display: block;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            border-left: 5px solid var(--primary);
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .content-card h3 {
+            margin-bottom: 20px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 19px;
+        }
+
+        /* MARKET FOREX DASHBOARD */
+        .market-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .chart-placeholder {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(139, 90, 43, 0.15);
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chart-visual {
+            height: 65%;
+            border-bottom: 2px dashed rgba(139, 90, 43, 0.3);
+            position: relative;
+            background: linear-gradient(to bottom, rgba(0, 230, 118, 0.08), transparent);
+            border-radius: 8px;
+        }
+
+        .trade-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-trade {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+
+        .btn-buy { background: linear-gradient(135deg, #00c853 0%, var(--green-trade) 100%); box-shadow: 0 6px 20px rgba(0, 230, 118, 0.35); }
+        .btn-sell { background: linear-gradient(135deg, #d50000 0%, var(--red-trade) 100%); box-shadow: 0 6px 20px rgba(255, 82, 82, 0.35); }
+        .btn-trade:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn-trade:active { transform: translateY(1px); }
+
+        /* INPUTS & FIELDS */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
+        .form-control {
+            width: 100%; padding: 14px; background-color: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(139, 90, 43, 0.4); border-radius: 10px; color: #ffffff;
+        }
+        .form-control:focus { outline: none; border-color: var(--accent); }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: #ffffff; padding: 12px 30px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
+        }
+
+        /* LANGUAGE */
+        .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+        .lang-btn {
+            background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(139, 90, 43, 0.25);
+            padding: 14px; border-radius: 10px; color: #ffffff; cursor: pointer; text-align: center; transition: var(--transition);
+        }
+        .lang-btn:hover, .lang-btn.active { background: var(--primary); border-color: var(--accent); }
+
+        /* TOGGLE SWITCH */
+        .switch { position: relative; display: inline-block; width: 55px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #3a3530; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 3px; background-color: #ffffff; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(25px); background-color: var(--accent); }
+
+        /* ALERT POPUP */
+        .alert-box {
+            position: fixed; bottom: 25px; right: -450px; background: linear-gradient(135deg, var(--bg-card) 0%, #2b1f17 100%);
+            color: #ffffff; padding: 18px 30px; border-radius: 12px; box-shadow: var(--shadow-lg); transition: right 0.4s ease;
+            z-index: 100; display: flex; align-items: center; gap: 15px; border-left: 6px solid var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+        <div>
+            <div class="logo-section">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>X-TRADE</span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item active" onclick="switchPage('trading', this)"><i class="fa-solid fa-money-bill-trend-up"></i> <span class="lang-text" data-key="nav_trade">Trading</span></li>
+                <li class="nav-item" onclick="switchPage('profile', this)"><i class="fa-solid fa-user"></i> <span class="lang-text" data-key="nav_profile">My Profile</span></li>
+                <li class="nav-item" onclick="switchPage('settings', this)"><i class="fa-solid fa-gear"></i> <span class="lang-text" data-key="nav_settings">Settings</span></li>
+                <li class="nav-item" onclick="switchPage('help', this)"><i class="fa-solid fa-headset"></i> <span class="lang-text" data-key="nav_help">Help Centre</span></li>
+                <li class="nav-item" onclick="switchPage('security', this)"><i class="fa-solid fa-shield-halved"></i> <span class="lang-text" data-key="nav_security">Privacy & Security</span></li>
+                <li class="nav-item" onclick="switchPage('about', this)"><i class="fa-solid fa-circle-info"></i> <span class="lang-text" data-key="nav_about">About Info</span></li>
+            </ul>
+        </div>
+        <div>
+            <div class="nav-item" onclick="triggerShare()"><i class="fa-solid fa-share-nodes"></i> <span class="lang-text" data-key="nav_share">Share App</span></div>
+        </div>
+    </div>
+
+    <!-- MAIN INTERFACE AREA -->
+    <div class="main-content">
+        <!-- Top Header Bar -->
+        <div class="top-header">
+            <h2 id="page-title">TRADING</h2>
+            <div class="balance-card">
+                <span class="lang-text" data-key="balance_title">Balance:</span>
+                <span class="balance-amount" id="user-balance">$10,250.80</span>
+            </div>
+        </div>
+
+        <!-- PAGE 1: TRADING (BUY/SELL) -->
+        <div id="trading" class="app-page active-page">
+            <div class="market-grid">
+                <div>
+                    <div class="chart-placeholder">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>EUR / USD (Live Forex Chart)</h4>
+                            <span style="color: var(--green-trade)"><i class="fa-solid fa-caret-up"></i> +0.24%</span>
+                        </div>
+                        <div class="chart-visual">
+                            <div style="position: absolute; bottom: 30%; left: 15%; color: var(--accent); font-weight: bold; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;">1.0842 Live</div>
+                        </div>
+                        <div class="trade-actions">
+                            <button class="btn-trade btn-buy" onclick="executeTrade('BUY')">BUY / LONG</button>
+                            <button class="btn-trade btn-sell" onclick="executeTrade('SELL')">SELL / SHORT</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="content-card" style="height: 100%;">
+                        <h3 class="lang-text" data-key="quick_bet">Quick Execution</h3>
+                        <div class="form-group">
+                            <label class="lang-text" data-key="amount_label">Lot Size / Amount ($):</label>
+                            <input type="number" class="form-control" value="100" id="trade-amount">
+                        </div>
+                        <div class="form-group">
+                            <label>Leverage Config:</label>
+                            <select class="form-control">
+                                <option>1:100</option>
+                                <option>1:200</option>
+                                <option>1:500</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: PROFILE -->
+        <div id="profile" class="app-page">
+            <div class="content-card">
+                <h3 class="lang-text" data-key="profile_title"><i class="fa-solid fa-user-gear"></i> User Profile</h3>
+                <div class="form-group">
+                    <label>Account ID:</label>
+                    <input type="text" class="form-control" value="XT7749201" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" class="form-control" id="profile-name" value="John Doe">
+                </div>
+                <button class="btn-save" onclick="saveProfile()">Update Profile</button>
+            </div>
+        </div>
+
+        <!-- PAGE 3: SETTINGS -->
+        <div id="settings" class="app-page">
+            <div class="content-card">
+                <h3 class="lang-text" data-key="dark_mode_title"><i class="fa-solid fa-moon"></i> Dark Mode Settings</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p class="lang-text" data-key="dark_mode_desc">Enable Premium Ultra-Dark Mode Background</p>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3><i class="fa-solid fa-language"></i> App Language / Luuqada</h3>
+                <div class="lang-grid">
+                    <button class="lang-btn active" onclick="changeLanguage('en', this)">English</button>
+                    <button class="lang-btn" onclick="changeLanguage('fr', this)">France</button>
+                    <button class="lang-btn" onclick="changeLanguage('so', this)">Somali</button>
+                    <button class="lang-btn" onclick="changeLanguage('es', this)">Spanish</button>
+                    <button class="lang-btn" onclick="changeLanguage('de', this)">Germany</button>
+                    <button class="lang-btn" onclick="changeLanguage('be', this)">Belgium</button>
+                    <button class="lang-btn" onclick="changeLanguage('jp', this)">Japan</button>
+                    <button class="lang-btn" onclick="changeLanguage('ru', this)">Russian</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: HELP CENTRE -->
+        <div id="help" class="app-page">
+            <div class="content-card">
+                <h3><i class="fa-solid fa-circle-question"></i> Help Centre & Support</h3>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">Haddii aad qabto wax su'aal ah, kooxdayada taageerada waxay furan tahay 24/7.</p>
+                <div class="form-group">
+                    <label>U dir fariin toos ah support-ka:</label>
+                    <textarea class="form-control" rows="4" placeholder="Ku qor su'aashaada halkaan..."></textarea>
+                </div>
+                <button class="btn-save" onclick="showAlert('Fariintaada waa la diray! Dhawaan ayaa laguugu soo jawaabi doonaa.')">Send Ticket</button>
+            </div>
+        </div>
+
+        <!-- PAGE 5: PRIVACY & SECURITY -->
+        <div id="security" class="app-page">
+            <div class="content-card">
+                <h3><i class="fa-solid fa-lock"></i> Privacy & Security Policy</h3>
+                <p style="line-height: 1.6; color: var(--text-muted);">
+                    X-Trade waxay u hureysaa ilaalinta xogtaada gaarka ah sifo waafaqsan shuruucda caalamiga ah ee sirta. Dhammaan xogaha maaliyadeed iyo isweydaarsiga lacagaha waxaa lagu ilaaliyay nidaamka **256-bit SSL Encryption**. 
+                </p>
+                <div style="margin-top: 15px; display:flex; gap:10px;">
+                    <button class="btn-save" style="background-color: #333;" onclick="showAlert('Two-Factor Authentication (2FA) is now enabled!')">Enable 2FA</button>
+                    <button class="btn-save" style="background-color: #333;" onclick="showAlert('Password change terminal opened.')">Change Password</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 6: ABOUT INFO -->
+        <div id="about" class="app-page">
+            <div class="content-card">
+                <h3><i class="fa-solid fa-circle-info"></i> About Information</h3>
+                <p style="line-height: 1.6;">
+                    <strong>Application Name:</strong> X-Trade (Premium Forex & Betting Engine)<br>
+                    <strong>Version:</strong> 4.2.0 (Modern UI update)<br>
+                    <strong>Developer Studio:</strong> Powered by GitHub Dev Environment.<br><br>
+                    App-kan waxaa loo dhisay inuu isku xiro fududaanta Betting-ka iyo faa'iidada hantida qalaad ee Forex Trading.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert system notification -->
+    <div id="custom-alert" class="alert-box">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="alert-text">Notification</span>
+    </div>
+
+    <!-- JAVASCRIPT ENGINE (All Buttons Work Dynamic) -->
+    <script>
+        const translations = {
+            en: {
+                nav_trade: "Trading", nav_profile: "My Profile", nav_settings: "Settings",
+                nav_help: "Help Centre", nav_security: "Privacy & Security", nav_about: "About Info",
+                nav_share: "Share App", balance_title: "Balance:", quick_bet: "Quick Execution",
+                amount_label: "Lot Size / Amount ($):", profile_title: "User Profile",
+                dark_mode_title: "Dark Mode Settings", dark_mode_desc: "Enable Premium Ultra-Dark Mode Background"
+            },
+            so: {
+                nav_trade: "Ganacsiga", nav_profile: "Profile-kayga", nav_settings: "Hagaajinta",
+                nav_help: "Xarunta Caawinaada", nav_security: "Amniga & Sirta", nav_about: "Ku Saabsan App-ka",
+                nav_share: "La Wadaag App-ka", balance_title: "Haraaga:", quick_bet: "Fulin Degdeg Ah",
+                amount_label: "Xaddiga Lacagta ($):", profile_title: "Profile-ka Isticmaalaha",
+                dark_mode_title: "Muuqaalka Habeenka", dark_mode_desc: "Daar nidaamka madowga aadka u dhow ee Premium-ka ah"
+            },
+            fr: {
+                nav_trade: "Commerce", nav_profile: "Mon Profil", nav_settings: "Paramètres",
+                nav_help: "Aide", nav_security: "Sécurité", nav_about: "À propos",
+                nav_share: "Partager l'app", balance_title: "Solde:"
+            }
+        };
+
+        function switchPage(pageId, element) {
+            const pages = document.querySelectorAll('.app-page');
+            pages.forEach(page => page.classList.remove('active-page'));
+            
+            document.getElementById(pageId).classList.add('active-page');
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            if(element) element.classList.add('active');
+            document.getElementById('page-title').innerText = pageId.toUpperCase();
+        }
+
+        let balance = 10250.80;
+        function executeTrade(type) {
+            const amount = parseFloat(document.getElementById('trade-amount').value);
+            if(isNaN(amount) || amount <= 0) {
+                showAlert("Fadlan geli lacag sax ah!");
+                return;
+            }
+            
+            if(type === 'BUY') {
+                balance += (amount * 0.12);
+                showAlert(`📈 BUY Order Executed Successfully!`);
+            } else {
+                balance -= (amount * 0.08);
+                showAlert(`📉 SELL Position Opened Successfully!`);
+            }
+            document.getElementById('user-balance').innerText = `$${balance.toFixed(2)}`;
+        }
+
+        function toggleTheme() {
+            const toggle = document.getElementById('theme-toggle');
+            if(toggle.checked) {
+                document.body.setAttribute('data-theme', 'dark-premium');
+                showAlert("Premium Dark-Ultra background activated!");
+            } else {
+                document.body.removeAttribute('data-theme');
+                showAlert("Standard Black & Brown theme restored.");
+            }
+        }
+
+        function changeLanguage(lang, btn) {
+            const langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if(translations[lang]) {
+                const textElements = document.querySelectorAll('.lang-text');
+                textElements.forEach(elem => {
+                    const key = elem.getAttribute('data-key');
+                    if(translations[lang][key]) {
+                        elem.innerText = translations[lang][key];
+                    }
+                });
+            }
+            showAlert(`Language: ${btn.innerText}`);
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('profile-name').value;
+            showAlert(`Profile updated! Welcome ${name}`);
+        }
+
+        function triggerShare() {
+            showAlert("Link shared / Copied to clipboard!");
+        }
+
+        function showAlert(message) {
+            const alertBox = document.getElementById('custom-alert');
+            document.getElementById('alert-text').innerText = message;
+            alertBox.style.right = '20px';
+            setTimeout(() => { alertBox.style.right = '-450px'; }, 3000);
+        }
+    </script>
+</body>
+</html>
